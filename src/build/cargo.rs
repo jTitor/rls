@@ -168,7 +168,12 @@ fn run_cargo(compilation_cx: Arc<Mutex<CompilationContext>>,
                                 compiler_messages,
                                 analyses);
 
-    compile_with_exec(&ws, &compile_opts, Arc::new(exec)).expect("could not run cargo");
+    //Unclear if this is a nonfatal failure -
+    //but hey, only one way to find out
+    match compile_with_exec(&ws, &compile_opts, Arc::new(exec)) {
+        Ok(_) => {},
+        Err(reason) => { warn!("Could not run cargo: {}, this call might panic", reason) }
+    }
 
     trace!("Created build plan after Cargo compilation routine: {:?}",
         compilation_cx.lock().unwrap().build_plan);
