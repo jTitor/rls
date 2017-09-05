@@ -168,11 +168,13 @@ fn run_cargo(compilation_cx: Arc<Mutex<CompilationContext>>,
                                 compiler_messages,
                                 analyses);
 
+    warn!("Commencing Cargo build execution");
+
     //Unclear if this is a nonfatal failure -
     //but hey, only one way to find out
     match compile_with_exec(&ws, &compile_opts, Arc::new(exec)) {
         Ok(_) => {},
-        Err(reason) => { warn!("Could not run cargo: {}, this call might panic", reason) }
+        Err(reason) => { warn!("Could not run cargo: {}, this call might panic", reason); }
     }
 
     trace!("Created build plan after Cargo compilation routine: {:?}",
